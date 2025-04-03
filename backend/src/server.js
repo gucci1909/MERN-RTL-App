@@ -5,6 +5,9 @@ import express from "express";
 import { fileURLToPath } from "url";
 import MongoDBConnectDB from "./config/db.js";
 import userRoutes from "./routes/user.route.js";
+import postRoutes from "./routes/post.route.js";
+import commentRoutes from "./routes/comment.route.js";
+import likeRoutes from "./routes/like.route.js";
 dotenv.config({ path: ".env.local" });
 
 const app = express();
@@ -20,10 +23,10 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", userRoutes);
-// app.use("/api/posts", postRoutes);
+app.use("/api/posts", postRoutes);
 
-// app.use("/api/comment", commentRoutes);
-// app.use("/api/like", likeRoutes);
+app.use("/api/comment", commentRoutes);
+app.use("/api/like", likeRoutes);
 
 app.listen(PORT, async () => {
   await MongoDBConnectDB();

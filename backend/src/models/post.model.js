@@ -7,6 +7,7 @@ const PostSchema = new mongoose.Schema(
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     likes: { type: Number, default: 0 },
     image_url: { type: String, default: "" },
+    deletedAt: { type: Date, default: null }, // Soft delete field
   },
   { timestamps: true, versionKey: false }
 );
