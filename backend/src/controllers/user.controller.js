@@ -1,19 +1,20 @@
-import { validationResult } from "express-validator";
 import userModel from "../models/user.model.js";
 import { checkPassword, hashPassword } from "../helper/user/hashedPw.js";
 import { generateToken } from "../helper/user/token.js";
+import {
+  findUserByEmail,
+  validateRequest,
+} from "../helper/user/aggregations.js";
 
 export const signupController = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  if (validateRequest(req, res)) return;
 
   const { username, email, password, role } = req.body;
 
   try {
-    let userExists = await userModel.findOne({ email });
-    if (userExists) {
+    const userExists = await userModel.aggregate(findUserByEmail(email));
+
+    if (userExists.length > 0) {
       return res
         .status(400)
         .json({ message: "⚠️ Oops! This email is already in use." });
@@ -30,45 +31,48 @@ export const signupController = async (req, res) => {
 
     await user.save();
 
-    return res
-      .status(201)
-      .json({ message: `🎉 Welcome aboard, ${username}! Registration successful.` });
+    return res.status(201).json({
+      message: `🎉 Welcome aboard, ${username}! Registration successful.`,
+    });
   } catch (error) {
-    return res.status(500).json({ message: "🚨 Internal Server Error!", error });
+    return res
+      .status(500)
+      .json({ message: "🚨 Internal Server Error!", error });
   }
 };
 
 export const loginController = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  if (validateRequest(req, res)) return;
 
   const { email, password } = req.body;
 
   try {
-    const user = await userModel.findOne({ email });
+    const user = await userModel.aggregate(findUserByEmail(email));
 
-    if (!user) {
-      return res.status(401).json({ message: "❌ No account found with this email." });
+    if (user.length === 0) {
+      return res
+        .status(401)
+        .json({ message: "❌ No account found with this email." });
     }
 
+    const userData = user[0];
     const isMatch = await checkPassword(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "🔐 Incorrect password! Try again." });
+      return res
+        .status(401)
+        .json({ message: "🔐 Incorrect password! Try again." });
     }
 
-    const token = generateToken(
-      { id: user._id, role: user.role },
-    );
+    const token = generateToken({ id: userData._id, role: userData.role });
 
     return res.json({
-      message: `🚀 Welcome back, ${user.username}!`,
+      message: `🚀 Welcome back, ${userData.username}!`,
       token,
-      user: { id: user._id, username: user.username, role: user.role },
+      user: { username: userData.username, role: userData.role },
     });
-    
   } catch (error) {
-    return res.status(500).json({ message: "🚨 Internal Server Error!", error });
+    return res
+      .status(500)
+      .json({ message: "🚨 Internal Server Error!", error });
   }
 };
