@@ -1,14 +1,16 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": ""
   },
   "keywords": [],
-  "author": "",
+  "author": "Umang Arora",
   "license": "ISC",
-  "description": "",
+  "description": "CRUD Operations for Post with different roles (User and Admin) and auth",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
