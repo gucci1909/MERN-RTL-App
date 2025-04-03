@@ -7,6 +7,7 @@ import {
   validateAddComment,
   validateApproveComment,
 } from "../helper/comment/validations.js";
+import { addCommentController, approveCommentController } from "../controllers/comment.controller.js";
 
 dotenv.config({ path: ".env.local" });
 
@@ -16,7 +17,7 @@ commentRoutes.use(authMiddleware, apiLimiter);
 
 /**
  * @route GET /api/comments/:post_id
- * @desc Add a comment to a specific post
+ * @desc Add a comment to a specific post, will go in pending state
  * @access Protected (Requires authentication)
  */
 commentRoutes.post("/:post_id", validateAddComment, addCommentController);

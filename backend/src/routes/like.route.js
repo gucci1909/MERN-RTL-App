@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import authMiddleware from "../middlewares/authenticate.js";
 import apiLimiter from "../middlewares/rateLimiter.js";
 import { validateLikeAction } from "../helper/like/validations.js";
+import { addLikeController, viewLikeController } from "../controllers/like.controller.js";
 
 dotenv.config({ path: ".env.local" });
 

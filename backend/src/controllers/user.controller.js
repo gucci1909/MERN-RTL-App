@@ -6,7 +6,7 @@ import {
   validateRequest,
 } from "../helper/user/aggregations.js";
 
-export const signupController = async (req, res) => {
+const signupController = async (req, res) => {
   if (validateRequest(req, res)) return;
 
   const { username, email, password, role } = req.body;
@@ -41,7 +41,7 @@ export const signupController = async (req, res) => {
   }
 };
 
-export const loginController = async (req, res) => {
+const loginController = async (req, res) => {
   if (validateRequest(req, res)) return;
 
   const { email, password } = req.body;
@@ -76,3 +76,5 @@ export const loginController = async (req, res) => {
       .json({ message: "🚨 Internal Server Error!", error });
   }
 };
+
+export { signupController, loginController };

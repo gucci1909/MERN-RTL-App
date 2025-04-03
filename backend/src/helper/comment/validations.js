@@ -1,3 +1,5 @@
+import { body } from "express-validator";
+
 const validateAddComment = [
   body("content").notEmpty().withMessage("Comment content is required"),
   body("user_id")
