@@ -8,7 +8,7 @@
     "dev": "nodemon src/server.js",
     "test": ""
   },
-  "keywords": [],
+  "keywords": ["CRUD", "CACHING", "Message Queue", "Rate-Limiter", "logging", "Social-App"],
   "author": "Umang Arora",
   "license": "ISC",
   "description": "CRUD Operations for Post with different roles (User and Admin) and auth",
