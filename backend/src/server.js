@@ -4,6 +4,7 @@ import cors from "cors";
 import express from "express";
 import { fileURLToPath } from "url";
 import MongoDBConnectDB from "./config/db.js";
+import userRoutes from "./routes/user.route.js";
 dotenv.config({ path: ".env.local" });
 
 const app = express();
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
-// app.use("/api/auth", userRoutes);
+app.use("/api/auth", userRoutes);
 // app.use("/api/posts", postRoutes);
 
 // app.use("/api/comment", commentRoutes);
