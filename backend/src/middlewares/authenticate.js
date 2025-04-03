@@ -1,9 +1,11 @@
 import jwt from "jsonwebtoken";
+import logger from "../config/logger.js";
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
+    logger.warn(`Unauthorized access attempt - ${req.method} ${req.url}`);
     return res.status(401).json({
       message:
         "🛑 Access Denied! You need a valid token to proceed. Please log in and try again. 🔐",
@@ -15,6 +17,7 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
+    logger.error(`Invalid token used - ${req.method} ${req.url}`);
     if (error.name === "TokenExpiredError") {
       return res.status(401).json({
         message:
