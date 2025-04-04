@@ -14,15 +14,20 @@ import logger from "./config/logger.js";
 import errorHandler from "./middlewares/errorHandler.js";
 dotenv.config();
 
+/* this is a express framework api, where we are making api's for a social-media app where a user can post content after logging to 
+the application, we also have features like adding comments(admin approved), adding likes to posts and many more */
+
 const app = express();
 const PORT = +process.env.PORT || 5000;
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/* we are using middle wares for logging, json data, cors, helmet */
 app.use(cors());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// logger using morgan
 app.use(
   morgan("dev", { stream: { write: (message) => logger.info(message.trim()) } })
 );
@@ -31,12 +36,14 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
+/* sharing the endpoints for the required routes */
 app.use("/api/auth", userRoutes);
 app.use("/api/posts", postRoutes);
 
 app.use("/api/comment", commentRoutes);
 app.use("/api/like", likeRoutes);
 
+/* error handling for logging using winston*/
 app.use(errorHandler);
 
 app.listen(PORT, async () => {
