@@ -56,7 +56,7 @@ const loginController = async (req, res) => {
     }
 
     const userData = user[0];
-    const isMatch = await checkPassword(password, user.password);
+    const isMatch = await checkPassword(password, userData.password);
     if (!isMatch) {
       return res
         .status(401)

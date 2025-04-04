@@ -9,11 +9,11 @@ import {
 } from "../helper/comment/validations.js";
 import { addCommentController, approveCommentController } from "../controllers/comment.controller.js";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const commentRoutes = express.Router();
 
-commentRoutes.use(authMiddleware, apiLimiter);
+commentRoutes.use(apiLimiter, authMiddleware);
 
 /**
  * @route GET /api/comments/:post_id

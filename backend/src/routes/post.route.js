@@ -4,12 +4,13 @@ import authMiddleware from "../middlewares/authenticate.js";
 import apiLimiter from "../middlewares/rateLimiter.js";
 import { validatePost } from "../helper/post/validations.js";
 import { allPostController, createPostController } from "../controllers/post.controller.js";
+import upload from "../middlewares/uploadPhoto.js";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const postRoutes = express.Router();
 
-postRoutes.use(authMiddleware, apiLimiter);
+postRoutes.use(apiLimiter, authMiddleware);
 
 /**
  * @route GET /api/posts
@@ -23,6 +24,6 @@ postRoutes.get("/", allPostController);
  * @desc creating post here using message queue, workers to upload data to third parties(cloudinary for photo upload)
  * @access Protected (Requires authentication)
 */
-postRoutes.post("/", validatePost, createPostController);
+postRoutes.post("/", upload.single("image"), validatePost, createPostController);
 
 export default postRoutes;

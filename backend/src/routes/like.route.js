@@ -5,11 +5,11 @@ import apiLimiter from "../middlewares/rateLimiter.js";
 import { validateLikeAction } from "../helper/like/validations.js";
 import { addLikeController, viewLikeController } from "../controllers/like.controller.js";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const likeRoutes = express.Router();
 
-likeRoutes.use(authMiddleware, apiLimiter);
+likeRoutes.use(apiLimiter, authMiddleware);
 
 /**
  * @route GET /api/likes/:post_id

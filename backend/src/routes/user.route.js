@@ -6,9 +6,10 @@ import {
 } from "../controllers/user.controller.js";
 import { validateLogin, validateSignup } from "../helper/user/validations.js";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const userRoutes = express.Router();
+
 
 /**
  * @route POST /api/auth/signup

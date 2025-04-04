@@ -12,7 +12,7 @@ import commentRoutes from "./routes/comment.route.js";
 import likeRoutes from "./routes/like.route.js";
 import logger from "./config/logger.js";
 import errorHandler from "./middlewares/errorHandler.js";
-dotenv.config({ path: ".env.local" });
+dotenv.config();
 
 const app = express();
 const PORT = +process.env.PORT || 5000;
