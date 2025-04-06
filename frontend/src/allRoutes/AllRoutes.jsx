@@ -14,8 +14,9 @@ function AllRoutes() {
         <Route
           path="/"
           element={
-            // <PrivateRoute>
-            <Home />
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
           }
         ></Route>
         <Route path="/login" element={<Auth />}></Route>
@@ -23,9 +24,9 @@ function AllRoutes() {
         <Route
           path="/*"
           element={
-            // <PrivateRoute>
-            <Home />
-            // </PrivateRoute>
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
           }
         ></Route>
       </Routes>
