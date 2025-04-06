@@ -4,8 +4,7 @@ import { CheckCircle, Loader2, XCircle } from "lucide-react";
 import { useSelector } from "react-redux";
 
 function CommentApprove() {
-  const { token, profile } = useSelector((state) => state.user);
-  const user_id = profile.userId;
+  const { token } = useSelector((state) => state.user);
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
@@ -29,14 +28,14 @@ function CommentApprove() {
     }
   };
 
-  const handleApproval = async (postId, comment_id, status) => {
+  const handleApproval = async (postId, comment_id, status, userId) => {
     setActionLoading(true);
     try {
       await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/comment/admin/approve/${postId}`,
         {
           comment_id,
-          user_id,
+          user_id: userId,
           approved: status,
         },
         {
@@ -94,7 +93,7 @@ function CommentApprove() {
               <div className="mt-4 flex justify-end gap-3">
                 <button
                   onClick={() =>
-                    handleApproval(comment.post_id, comment._id, true)
+                    handleApproval(comment.post_id, comment._id, true, comment.user_id)
                   }
                   disabled={actionLoading}
                   className="flex items-center gap-1 cursor-pointer rounded-full bg-green-100 px-3 py-1.5 text-xs font-medium text-green-700 transition hover:bg-green-200 disabled:opacity-50"
