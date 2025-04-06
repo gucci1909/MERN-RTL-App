@@ -1,3 +1,4 @@
+import { getPendingCommentAggregation } from "../helper/comment/aggregations.js";
 import { validateRequest } from "../helper/user/aggregations.js";
 import commentModel from "../models/comment.model.js";
 
@@ -66,4 +67,14 @@ const approveCommentController = async (req, res) => {
   }
 };
 
-export { addCommentController, approveCommentController };
+const showPendingComments = async (req, res) => {
+  try {
+    const result = await commentModel.aggregate(getPendingCommentAggregation());
+    res.status(200).json(result);
+  } catch (err) {
+    console.error("Error fetching pending comments:", err);
+    res.status(500).json({ error: "Failed to fetch pending comments" });
+  }
+};
+
+export { addCommentController, approveCommentController, showPendingComments };

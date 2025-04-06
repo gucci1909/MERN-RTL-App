@@ -7,7 +7,7 @@ import {
   validateAddComment,
   validateApproveComment,
 } from "../helper/comment/validations.js";
-import { addCommentController, approveCommentController } from "../controllers/comment.controller.js";
+import { addCommentController, approveCommentController, showPendingComments } from "../controllers/comment.controller.js";
 
 dotenv.config();
 
@@ -16,7 +16,14 @@ const commentRoutes = express.Router();
 commentRoutes.use(apiLimiter, authMiddleware);
 
 /**
- * @route GET /api/comments/:post_id
+ * @route Post /api/comments/pending
+ * @desc Show all the pending comments
+ * @access Protected (Requires auth)
+ */
+commentRoutes.get("/pending",  adminMiddleware, showPendingComments);
+
+/**
+ * @route Post /api/comments/:post_id
  * @desc Add a comment to a specific post, will go in pending state
  * @access Protected (Requires authentication)
  */
