@@ -146,7 +146,7 @@ npm run dev
 
 ### 💬 Comments & Likes
 
-- Add/Delete comments
+- Add/Approve comments
 - Like/Unlike posts
 
 ### ⚙️ Backend Integrations
