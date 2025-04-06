@@ -14,7 +14,7 @@ const UploadPostForm = ({ onUpload }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !content || !image) return alert("All fields are required!");
+    if (!title || !content) return alert("All fields are required!");
 
     const formData = new FormData();
     formData.append("title", title);

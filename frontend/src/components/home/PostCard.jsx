@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Heart, MessageCircle, SendHorizonal } from "lucide-react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -78,6 +78,11 @@ const PostCard = ({
       alert("Failed to post comment");
     }
   };
+
+  useEffect(() => {
+    setLiked(likes_user_id.includes(currentUserId));
+    setLikeCount(likes);
+  }, [likes_user_id, likes, currentUserId]);
 
   return (
     <div className="relative mb-6 w-full max-w-2xl rounded-3xl border border-white/40 bg-white/60 p-6 shadow-2xl backdrop-blur-lg transition hover:shadow-blue-200">

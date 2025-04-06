@@ -36,6 +36,7 @@ function HomeMenu({ activeTab }) {
 
   useEffect(() => {
     if (activeTab === "Home") {
+      setPosts([]);
       fetchPosts();
     }
   }, [activeTab, token]);
