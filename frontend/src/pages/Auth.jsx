@@ -20,7 +20,7 @@ const Auth = () => {
       setLoading(true);
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        { email, password },
+        { email, password }
       );
 
       const { token, user } = response.data;
@@ -32,7 +32,9 @@ const Auth = () => {
     } catch (error) {
       const errMsg =
         error.response?.data?.message ||
-        "Invalid email or password. Please try again.";
+        (language === "AR"
+          ? "البريد الإلكتروني أو كلمة المرور غير صحيحة. حاول مرة أخرى."
+          : "Invalid email or password. Please try again.");
       setError(errMsg);
 
       console.error("Login Error:", error.response?.data || error.message);
@@ -43,11 +45,14 @@ const Auth = () => {
 
   return (
     <AuthLayout>
+      
+
       <AuthForm
         onSubmit={handleLogin}
         loading={loading}
         error={error}
         setError={setError}
+        language={"en"}
       />
     </AuthLayout>
   );

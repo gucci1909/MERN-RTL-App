@@ -11,7 +11,10 @@ const InputField = ({
 }) => {
   return (
     <div>
-      <label htmlFor={id} className="mb-1 block text-sm font-semibold">
+      <label
+        htmlFor={id}
+        className="mb-1 block text-sm font-semibold text-start"
+      >
         {label}
       </label>
       <input
@@ -21,7 +24,7 @@ const InputField = ({
         name={name}
         value={value}
         onChange={onChange}
-        className="w-full rounded-lg bg-white px-4 py-2 text-gray-900 shadow focus:ring-2 focus:ring-sky-400 focus:outline-none"
+        className="w-full rounded-lg bg-white px-4 py-2 text-gray-900 shadow focus:outline-none focus:ring-2 focus:ring-sky-400 rtl:text-right"
         required
       />
     </div>
