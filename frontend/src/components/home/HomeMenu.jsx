@@ -4,6 +4,7 @@ import Loader from "../common/Loader";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import UploadPostForm from "./UploadPostForm";
+import MyProfile from "./MyProfile";
 
 function HomeMenu({ activeTab }) {
   const token = useSelector((state) => state.user.token);
@@ -59,7 +60,7 @@ function HomeMenu({ activeTab }) {
         </div>
       )}
       {activeTab === "My Comments" && <p>💬 Here are your comments.</p>}
-      {activeTab === "Profile" && <p>👤 This is your profile.</p>}
+      {activeTab === "Profile" && <MyProfile/>}
     </main>
   );
 }

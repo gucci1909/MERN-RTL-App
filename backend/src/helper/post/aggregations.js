@@ -29,6 +29,31 @@ const getPostsWithDetails = () => [
   },
   {
     $lookup: {
+      from: "likes",
+      localField: "_id",
+      foreignField: "post",
+      as: "likeDetails",
+    },
+  },
+  {
+    $addFields: {
+      likes_user_id: {
+        $map: {
+          input: {
+            $filter: {
+              input: "$likeDetails",
+              as: "like",
+              cond: { $eq: ["$$like.like", true] }, // Only true likes
+            },
+          },
+          as: "like",
+          in: "$$like.user", // Extract only user IDs
+        },
+      },
+    },
+  },
+  {
+    $lookup: {
       from: "users",
       localField: "comments.user_id",
       foreignField: "_id",
@@ -75,6 +100,8 @@ const getPostsWithDetails = () => [
       content: 1,
       image_url: 1,
       likes: 1,
+      likes_user_id: 1,
+      createdAt: 1,
       user: {
         username: "$userDetails.username",
         email: "$userDetails.email",
@@ -82,7 +109,7 @@ const getPostsWithDetails = () => [
       comments: 1,
     },
   },
-  { $sort: { createdAt: -1 } },
+  { $sort: { createdAt: -1 } }
 ];
 
 export default getPostsWithDetails;

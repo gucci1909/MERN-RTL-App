@@ -70,7 +70,11 @@ const loginController = async (req, res) => {
     return res.json({
       message: `Welcome back, ${userData.username}!`,
       token,
-      user: { userId: userData._id, username: userData.username, role: userData.role },
+      user: {
+        userId: userData._id,
+        username: userData.username,
+        role: userData.role,
+      },
     });
   } catch (error) {
     return res
@@ -79,4 +83,33 @@ const loginController = async (req, res) => {
   }
 };
 
-export { signupController, loginController };
+const getProfileController = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const user = await userModel.findById(userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.json({
+      message: `Welcome, ${user.username}!`,
+      user: {
+        userId: user._id,
+        username: user.username,
+        email: user.email,
+        gender: user.gender,
+        bio: user.bio,
+        role: user.role,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "🚨 Internal Server Error!", error });
+  }
+};
+
+export { signupController, loginController, getProfileController };
