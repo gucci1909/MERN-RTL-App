@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Heart, MessageCircle } from "lucide-react";
 
-const PostCard = ({ title, content, image }) => {
+const PostCard = ({ title, content, image_url }) => {
   const [liked, setLiked] = useState(false);
 
   return (
@@ -9,10 +9,10 @@ const PostCard = ({ title, content, image }) => {
       <div className="mb-2 text-xl font-bold text-blue-700">{title}</div>
       <p className="mb-4 text-gray-800">{content}</p>
 
-      {image && (
+      {image_url && (
         <div className="mb-4 overflow-hidden rounded-xl">
           <img
-            src={image}
+            src={image_url}
             alt="Post visual"
             className="h-64 w-full object-cover transition-transform duration-300 hover:scale-105"
           />

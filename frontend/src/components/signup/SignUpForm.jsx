@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import TextAreaField from "./TextAreaField";
+import TextAreaField from "../common/TextAreaField";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../common/InputField";
-import SelectField from "./Choose";
+import SelectField from "../common/Choose";
 import axios from "axios";
 
 const initialState = {
@@ -35,8 +35,6 @@ const SignUpForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    debugger;
-    console.log({e:"sdfg"});
     setError("");
     setSuccess("");
 
@@ -50,8 +48,6 @@ const SignUpForm = () => {
       setSuccess(res.data.message || "Signup successful!");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-
-      console.log({e:err});
       const errMsg =
         err.response?.data?.message || "Signup failed. Please try again.";
       setError(errMsg);

@@ -26,7 +26,7 @@ const Auth = () => {
       const { token, user } = response.data;
 
       dispatch(login({ token, user }));
-      navigate("/home");
+      navigate("/");
 
       console.log("Login Success:", response.data);
     } catch (error) {
