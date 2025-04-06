@@ -1,11 +1,12 @@
 import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import Loader from "../components/common/Loader.jsx";
-import SignUp from "../pages/SignUp.jsx";
 
 const Auth = lazy(() => import("../pages/Auth"));
+const SignUp = lazy(() => import("../pages/SignUp.jsx"));
 const Home = lazy(() => import("../pages/Home"));
 const PrivateRoute = lazy(() => import("../hooks/PrivateRoute.jsx"));
+const PublicRoute = lazy(() => import("../hooks/PublicRoute.jsx"));
 
 function AllRoutes() {
   return (
@@ -14,21 +15,35 @@ function AllRoutes() {
         <Route
           path="/"
           element={
-            // <PrivateRoute>
+            <PrivateRoute>
               <Home />
-            // </PrivateRoute>
+            </PrivateRoute>
           }
-        ></Route>
-        <Route path="/login" element={<Auth />}></Route>
-        <Route path="/signup" element={<SignUp />}></Route>
+        />
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Auth />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <SignUp />
+            </PublicRoute>
+          }
+        />
         <Route
           path="/*"
           element={
-            // <PrivateRoute>
+            <PrivateRoute>
               <Home />
-            // </PrivateRoute>
+            </PrivateRoute>
           }
-        ></Route>
+        />
       </Routes>
     </Suspense>
   );

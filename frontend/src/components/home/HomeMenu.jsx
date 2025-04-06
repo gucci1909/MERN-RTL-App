@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import PostCard from "./PostCard";
-import Loader from "../common/Loader";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import UploadPostForm from "./UploadPostForm";
 import MyProfile from "./MyProfile";
+import CommentApprove from "../admin/CommentApprove";
 
 function HomeMenu({ activeTab }) {
-  const token = useSelector((state) => state.user.token);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { token, profile } = useSelector((state) => state.user);
+  const currentUserRole = profile.role;
 
   const fetchPosts = async () => {
     try {
@@ -59,8 +60,8 @@ function HomeMenu({ activeTab }) {
           ))}
         </div>
       )}
-      {activeTab === "My Comments" && <p>💬 Here are your comments.</p>}
-      {activeTab === "Profile" && <MyProfile/>}
+      {activeTab === "Review Comments" && currentUserRole === "admin" && <CommentApprove/>}
+      {activeTab === "Profile" && <MyProfile />}
     </main>
   );
 }
