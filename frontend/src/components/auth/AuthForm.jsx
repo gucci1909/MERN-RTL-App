@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import InputField from "../common/InputField";
 
@@ -8,11 +8,15 @@ const InitialState = {
   remember: false,
 };
 
-const AuthForm = ({ onSubmit }) => {
+const AuthForm = ({ onSubmit, loading, setError, error }) => {
   const [form, setForm] = useState(InitialState);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
+    if (error) {
+      setError("");
+    }
+
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -20,10 +24,13 @@ const AuthForm = ({ onSubmit }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(form);
-  };
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      onSubmit(form);
+    },
+    [form, onSubmit],
+  );
 
   return (
     <div className="w-full max-w-md rounded-3xl border border-white/40 bg-white/60 px-8 py-12 text-gray-800 shadow-2xl backdrop-blur-lg">
@@ -33,6 +40,12 @@ const AuthForm = ({ onSubmit }) => {
           Your social hub in the cloud ☁️
         </p>
       </div>
+
+      {error && (
+        <div className="mb-4 rounded-lg bg-red-100 px-4 py-2 text-sm text-red-700">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <InputField
@@ -84,7 +97,32 @@ const AuthForm = ({ onSubmit }) => {
           type="submit"
           className="w-full cursor-pointer rounded-lg bg-sky-500 py-2.5 font-semibold text-white transition hover:bg-sky-600"
         >
-          Sign In
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <svg
+                className="mr-2 h-5 w-5 animate-spin text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              Signing In...
+            </div>
+          ) : (
+            "Sign In"
+          )}
         </button>
 
         <p className="text-center text-sm text-gray-600">
@@ -101,4 +139,4 @@ const AuthForm = ({ onSubmit }) => {
   );
 };
 
-export default AuthForm;
+export default React.memo(AuthForm);

@@ -9,7 +9,7 @@ import {
 const signupController = async (req, res) => {
   if (validateRequest(req, res)) return;
 
-  const { username, email, password, role, gender } = req.body;
+  const { username, email, password, role, gender, bio } = req.body;
 
   try {
     const userExists = await userModel.aggregate(findUserByEmail(email));
@@ -26,7 +26,7 @@ const signupController = async (req, res) => {
       username,
       email,
       password: hashedPassword,
-      bio: "", 
+      bio,
       gender,
       role: role || "user",
     });
@@ -54,7 +54,7 @@ const loginController = async (req, res) => {
     if (user.length === 0) {
       return res
         .status(401)
-        .json({ message: "❌ No account found with this email." });
+        .json({ message: "No account found with this email." });
     }
 
     const userData = user[0];
@@ -62,15 +62,15 @@ const loginController = async (req, res) => {
     if (!isMatch) {
       return res
         .status(401)
-        .json({ message: "🔐 Incorrect password! Try again." });
+        .json({ message: "Invalid email or password. Please try again." });
     }
 
     const token = generateToken({ id: userData._id, role: userData.role });
 
     return res.json({
-      message: `🚀 Welcome back, ${userData.username}!`,
+      message: `Welcome back, ${userData.username}!`,
       token,
-      user: { username: userData.username, role: userData.role },
+      user: { userId: userData._id, username: userData.username, role: userData.role },
     });
   } catch (error) {
     return res

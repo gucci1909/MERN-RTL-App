@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import TextAreaField from "./TextAreaField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputField from "../common/InputField";
 import SelectField from "./Choose";
+import axios from "axios";
 
 const initialState = {
   username: "",
@@ -14,24 +15,69 @@ const initialState = {
 
 const SignUpForm = () => {
   const [form, setForm] = useState(initialState);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
+    if (error) {
+      setError("");
+    }
+
+    if (success) {
+      setSuccess("");
+    }
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting form:", form);
-    // API call here
+    debugger;
+    console.log({e:"sdfg"});
+    setError("");
+    setSuccess("");
+
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/signup`,
+        form,
+      );
+
+      setSuccess(res.data.message || "Signup successful!");
+      setTimeout(() => navigate("/login"), 2000);
+    } catch (err) {
+
+      console.log({e:err});
+      const errMsg =
+        err.response?.data?.message || "Signup failed. Please try again.";
+      setError(errMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      {error && (
+        <div className="rounded-md bg-red-100 px-4 py-2 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+      {success && (
+        <div className="rounded-md bg-green-100 px-4 py-2 text-sm text-green-700">
+          {success}
+        </div>
+      )}
+
       <InputField
         id="username"
         label="Username"
         type="text"
+        name="username"
         value={form.username}
         onChange={handleChange}
         placeholder="john_doe"
@@ -40,18 +86,29 @@ const SignUpForm = () => {
         id="email"
         label="Email"
         type="email"
+        name="email"
         value={form.email}
         onChange={handleChange}
         placeholder="you@social.com"
       />
-      <InputField
-        id="password"
-        label="Password"
-        type="password"
-        value={form.password}
-        onChange={handleChange}
-        placeholder="••••••••"
-      />
+      <div className="relative">
+        <InputField
+          id="password"
+          label="Password"
+          type={showPassword ? "text" : "password"}
+          name="password"
+          placeholder="••••••••"
+          value={form.password}
+          onChange={handleChange}
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute top-[38px] right-3 text-sm text-blue-600 hover:underline"
+        >
+          {showPassword ? "Hide" : "Show"}
+        </button>
+      </div>
       <SelectField
         id="gender"
         label="Gender"
@@ -74,9 +131,10 @@ const SignUpForm = () => {
 
       <button
         type="submit"
-        className="w-full cursor-pointer rounded-lg bg-sky-500 py-2.5 font-semibold text-white transition hover:bg-sky-600"
+        disabled={loading}
+        className="w-full cursor-pointer rounded-lg bg-sky-500 py-2.5 font-semibold text-white transition hover:bg-sky-600 disabled:opacity-50"
       >
-        Sign Up
+        {loading ? "Signing Up..." : "Sign Up"}
       </button>
 
       <p className="text-center text-sm text-gray-600">
