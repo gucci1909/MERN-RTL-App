@@ -9,7 +9,7 @@ import {
 const signupController = async (req, res) => {
   if (validateRequest(req, res)) return;
 
-  const { username, email, password, role } = req.body;
+  const { username, email, password, role, gender } = req.body;
 
   try {
     const userExists = await userModel.aggregate(findUserByEmail(email));
@@ -26,6 +26,8 @@ const signupController = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      bio: "", 
+      gender,
       role: role || "user",
     });
 

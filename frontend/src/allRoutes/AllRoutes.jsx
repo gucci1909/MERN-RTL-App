@@ -9,14 +9,13 @@ const PrivateRoute = lazy(() => import("../hooks/PrivateRoute.jsx"));
 
 function AllRoutes() {
   return (
-    <Suspense fallback={<Loader/>}>
+    <Suspense fallback={<Loader />}>
       <Routes>
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Home />
           }
         ></Route>
         <Route path="/login" element={<Auth />}></Route>
@@ -24,9 +23,9 @@ function AllRoutes() {
         <Route
           path="/*"
           element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
+            // <PrivateRoute>
+            <Home />
+            // </PrivateRoute>
           }
         ></Route>
       </Routes>
